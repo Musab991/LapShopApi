@@ -1,5 +1,5 @@
-﻿using BuisnessLibrary.Bl.Generic;
-using DomainLibrary.Entities;
+﻿using DomainLibrary.Entities;
+using DomainLibrary.Generic;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LapShop.Api.Controllers
@@ -25,7 +25,10 @@ namespace LapShop.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetById(int id)
         {
-            var category = _CategoryRepsitory.FindOne(c => c.CategoryId == id);
+            var category = 
+                _CategoryRepsitory
+                .FindOne(c => c.CategoryId == id);
+            
             if (category == null)
             {
                 return NotFound();

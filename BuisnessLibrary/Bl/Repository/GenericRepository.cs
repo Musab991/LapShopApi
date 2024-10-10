@@ -1,25 +1,11 @@
-﻿using BuisnessLibrary.Bl.Generic;
-using BuisnessLibrary.Data;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace BuisnessLibrary.Bl.Repository
 {
-    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
+    public class GenericRepository<TEntity> : IGenericRepository<TEntity>, IDisposable where TEntity : class
     {
         private readonly AppDbContext _appDbContext;
         private readonly DbSet<TEntity> _dbSet;
-
-        //While Creating an Instance of GenericRepository, we need to pass the UnitOfWork instance
-        //public GenericRepository(IUnitOfWork<AppDbContext> unitOfWork)
-        //  : this(unitOfWork.Context)
-        //{
-        //}
 
         public GenericRepository(AppDbContext contextService)
         {
@@ -36,19 +22,38 @@ namespace BuisnessLibrary.Bl.Repository
             _dbSet.Add(entity);
             _appDbContext.SaveChanges();
         }
-        public void AddMany(IEnumerable<TEntity> entities)
+        public async Task<TEntity> AddAsync(TEntity entity)
         {
-            foreach (var entity in entities)
+            if (entity == null)
             {
-                if (entity == null)
-                {
-                    throw new ArgumentNullException(nameof(entity));
+                throw new ArgumentNullException(nameof(entity));
+            }
+            await _dbSet.AddAsync(entity);
+            await _appDbContext.SaveChangesAsync();
 
-                }
+            return entity;
+        }
+        public void AddRange(IEnumerable<TEntity> entities)
+        {
+            if (entities == null || !entities.Any())
+            {
+                throw new ArgumentNullException(nameof(entities));
             }
             _dbSet.AddRange(entities);
-            _appDbContext.SaveChanges();
+
+                _appDbContext.SaveChanges();
         }
+        public async Task AddRangeAsync(IEnumerable<TEntity> entities)
+        {
+            if (entities == null || !entities.Any())
+            {
+                throw new ArgumentNullException(nameof(entities));
+            }
+
+            await _dbSet.AddRangeAsync(entities);
+            await _appDbContext.SaveChangesAsync();
+        }
+
         public void Delete(TEntity entity)
         {
             if (entity == null)
@@ -58,57 +63,116 @@ namespace BuisnessLibrary.Bl.Repository
             _dbSet.Remove(entity);
             _appDbContext.SaveChanges();
         }
-        public void DeleteMany(Expression<Func<TEntity, bool>> predicate)
+        public void DeleteRange(Expression<Func<TEntity, bool>> filter)
         {
-            var entities = Find(predicate);
+            var entities = Find(filter);
             _dbSet.RemoveRange(entities);
             _appDbContext.SaveChanges();
         }
-        public TEntity FindOne(Expression<Func<TEntity, bool>> predicate, FindOptions? findOptions = null)
-        {
-            return Get(findOptions).FirstOrDefault(predicate)!;
-        }
-        public IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> predicate, FindOptions? findOptions = null)
-        {
-            return Get(findOptions).Where(predicate);
-        }
-        public IQueryable<TEntity> GetAll(FindOptions? findOptions = null)
-        {
-            return Get(findOptions);
-        }
+
+        public TEntity FindOne(Expression<Func<TEntity, bool>> filter, string[]? includes = null)
+          => BuildQuery(filter, null, null, null, null, includes).FirstOrDefault();
+
+        public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> filter,
+                                 Expression<Func<TEntity, object>>? orderBy = null,
+                                 string orderByDirection = OrderBy.Ascending,
+                                 int? skip = null,
+                                 int? take = null,
+                                 string[]? includes = null)
+              => BuildQuery(filter, orderBy, orderByDirection, skip, take, includes).ToList();
+
+        public async Task<TEntity> FindOneAsync(Expression<Func<TEntity, bool>> filter, string[]? includes = null)
+             => await BuildQuery(filter, null, null, null, null, includes).SingleOrDefaultAsync();
+
+        public async Task<IReadOnlyList<TEntity>> FindAsync(Expression<Func<TEntity, bool>> filter, string[]? includes = null)
+                      => await BuildQuery(filter, null, null, null, null, includes).ToListAsync();
+    
+        public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> filter, int? skip, int? take,
+           Expression<Func<TEntity, object>> ?orderBy = null, string orderByDirection = OrderBy.Ascending, string[]? includes = null)
+            =>await BuildQuery(filter,orderBy, orderByDirection, skip,take,includes).ToListAsync();
+
+        public IQueryable<TEntity> GetAll(string[]? includes = null)
+        => BuildQuery(null, null, null, null, null, includes);
+        public async Task<IEnumerable<TEntity>> GetAllAsync(string[]? includes = null)
+        => await BuildQuery(null, null, null, null, null, includes).ToListAsync();
+
+
         public void Update(TEntity entity)
         {
             _dbSet.Update(entity);
             _appDbContext.SaveChanges();
         }
-        public bool Any(Expression<Func<TEntity, bool>> predicate)
+
+        public bool Any(Expression<Func<TEntity, bool>> filter)
+        => _dbSet.Any(filter);
+        public int Count(Expression<Func<TEntity, bool>> filter)
+        => _dbSet.Count(filter);
+
+        public async Task<int> CountAsync()
         {
-            return _dbSet.Any(predicate);
-        }
-        public int Count(Expression<Func<TEntity, bool>> predicate)
-        {
-            return _dbSet.Count(predicate);
-        }
-        private DbSet<TEntity> Get(FindOptions? findOptions = null)
-        {
-            findOptions ??= new FindOptions();
-            var entity = _appDbContext.Set<TEntity>();
-            if (findOptions.IsAsNoTracking && findOptions.IsIgnoreAutoIncludes)
-            {
-                entity.IgnoreAutoIncludes().AsNoTracking();
-            }
-            else if (findOptions.IsIgnoreAutoIncludes)
-            {
-                entity.IgnoreAutoIncludes();
-            }
-            else if (findOptions.IsAsNoTracking)
-            {
-                entity.AsNoTracking();
-            }
-            return entity;
+            return await _dbSet.CountAsync();
         }
 
+        public async Task<int> CountAsync(Expression<Func<TEntity, bool>> filter)
+        {
+            return await BuildQuery(filter).CountAsync();
+        }
 
+  
+        private IQueryable<TEntity> BuildQuery(Expression<Func<TEntity,bool>>?filter=null,
+            Expression<Func<TEntity, object>>? orderBy = null,string? orderByDirection=OrderBy.Ascending,
+            int ?skip=null,int? take = null, string[]? includes = null)
+        {
+
+            IQueryable<TEntity> query = _dbSet;
+
+            // Apply includes if provided
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    // Validate to ensure the include string is not null or empty
+                    if (!string.IsNullOrWhiteSpace(include))
+                    {
+                        query = query.Include(include);
+                    }
+                }
+            }
+
+            // Apply filtering if provided
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            // Apply ordering
+            if (orderBy != null)
+            {
+                query = orderByDirection == OrderBy.Ascending
+                    ? query.OrderBy(orderBy)
+                    : query.OrderByDescending(orderBy);
+            }
+
+            // Apply pagination if provided
+            if (skip.HasValue)
+            {
+                query = query.Skip(skip.Value);
+            }
+        
+            if (take.HasValue)
+            {
+                query = query.Take(take.Value);
+            }
+
+            return query;
+
+        }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
     }
+       
 
 }
