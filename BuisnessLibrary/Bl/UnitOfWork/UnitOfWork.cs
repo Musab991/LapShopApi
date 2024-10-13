@@ -1,4 +1,5 @@
 ﻿using BuisnessLibrary.Bl.Repository;
+using BuisnessLibrary.Bl.Repository.Interface;
 using BuisnessLibrary.Bl.UnitOfWork.Interface;
 using DomainLibrary.Entities;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -13,70 +14,91 @@ using static System.Reflection.Metadata.BlobBuilder;
 
 namespace BuisnessLibrary.Bl.UnitOfWork
 {
-    public class UnitOfWork: IUnitOfWork
+    public class UnitOfWork : IUnitOfWork, IDisposable
     {
         private readonly AppDbContext _context;
 
         public IGenericRepository<TbItem> Items { get; private set; }
+        public IGenericRepository<TbCategory> Categories{ get; private set; }
+        public IGenericRepository<TbItemType> ItemTypes{ get; private set; }
+        public IGenericRepository<TbO> Os{ get; private set; }
+        public IItemImageRepository ItemImages { get; private set; }
 
         private string _errorMessage = string.Empty;
-        //The following Object is going to hold the Transaction Object
-        private DbContextTransaction _objTran;
+        // Use the correct type for EF Core transactions
+        private IDbContextTransaction _objTran;
+
         public UnitOfWork(AppDbContext context)
         {
             _context = context;
-
             Items = new GenericRepository<TbItem>(_context);
-            //Books = new BooksRepository(_context);
+            Categories = new GenericRepository<TbCategory>(_context);
+            ItemTypes = new GenericRepository<TbItemType>(_context);
+            Os = new GenericRepository<TbO>(_context);
+            ItemImages = new ItemImageRepository(_context);
+
         }
-       
+
         public void CreateTransaction()
         {
-            //It will Begin the transaction on the underlying store connection
-            _objTran = (DbContextTransaction)_context.Database.BeginTransaction();
+            // BeginTransaction returns IDbContextTransaction in EF Core
+            _objTran = _context.Database.BeginTransaction();
         }
-       
-        public void Commit()
+
+        public async Task CommitAsync()
         {
-            //Commits the underlying store transaction
-            _objTran.Commit();
+            try
+            {
+                await SaveAsync();
+                _objTran?.Commit();
+            }
+            catch
+            {
+                Rollback();
+                throw; // Re-throw the exception after rollback
+            }
         }
-        
+
         public void Rollback()
         {
-            //Rolls back the underlying store transaction
-            _objTran.Rollback();
-            //The Dispose Method will clean up this transaction object and ensures Entity Framework
-            //is no longer using that transaction.
-            _objTran.Dispose();
+            _objTran?.Rollback();
+            _objTran?.Dispose();
         }
-        //The Save() Method Implement DbContext Class SaveChanges method 
-        //So whenever we do a transaction we need to call this Save() method 
-        //so that it will make the changes in the database permanently
+
         public void Save()
         {
             try
             {
-                //Calling DbContext Class SaveChanges method 
                 _context.SaveChanges();
             }
             catch (DbEntityValidationException dbEx)
             {
+                var errorMessage = new StringBuilder();
                 foreach (var validationErrors in dbEx.EntityValidationErrors)
                 {
                     foreach (var validationError in validationErrors.ValidationErrors)
                     {
-                        _errorMessage = _errorMessage + $"Property: {validationError.PropertyName} Error: {validationError.ErrorMessage} {Environment.NewLine}";
+                        errorMessage.AppendLine($"Property: {validationError.PropertyName} Error: {validationError.ErrorMessage}");
                     }
                 }
-                throw new Exception(_errorMessage, dbEx);
+                throw new Exception(errorMessage.ToString(), dbEx);
             }
+        }
+
+        public async Task SaveAsync()
+        {
+            await _context.SaveChangesAsync();
         }
 
         public void Dispose()
         {
-             _context.Dispose();
+            _context.Dispose();
+            _objTran?.Dispose();
         }
-        //Disposing of the Context Object
+
+        public void Commit()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

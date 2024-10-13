@@ -18,7 +18,7 @@ public partial class TbItem: ISoftDeletable
 
     public string? ImageName { get; set; }
 
-    public DateOnly CreatedDate { get; set; }
+    public DateTime CreatedDate { get; set; }
 
     public string CreatedBy { get; set; } = null!;
 
@@ -26,7 +26,7 @@ public partial class TbItem: ISoftDeletable
 
     public string? UpdatedBy { get; set; }
 
-    public DateOnly? UpdatedDate { get; set; }
+    public DateTime? UpdatedDate { get; set; }
 
     public string? Description { get; set; }
 
@@ -38,7 +38,7 @@ public partial class TbItem: ISoftDeletable
 
     public int OsId { get; set; }
 
-    public int Gpuid { get; set; }
+    public int GpuId { get; set; }
 
     public int ProcessorId { get; set; }
 
@@ -77,4 +77,5 @@ public partial class TbItem: ISoftDeletable
     public virtual ICollection<TbSalesInvoiceItem> TbSalesInvoiceItems { get; set; } = new List<TbSalesInvoiceItem>();
 
     public virtual ICollection<TbCustomer> Customers { get; set; } = new List<TbCustomer>();
+
 }

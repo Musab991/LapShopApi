@@ -51,7 +51,7 @@ public partial class VwItem
 
     public int ItemId { get; set; }
 
-    public int Gpuid { get; set; }
+    public int GpuId { get; set; }
 
     public string Gpuname { get; set; } = null!;
 

@@ -19,13 +19,13 @@ public partial class TbSalesInvoice
 
     public string CreatedBy { get; set; } = null!;
 
-    public DateOnly CreatedDate { get; set; }
+    public DateTime CreatedDate { get; set; }
 
     public int CurrentState { get; set; }
 
     public string? UpdatedBy { get; set; }
 
-    public DateOnly? UpdatedDate { get; set; }
+    public DateTime? UpdatedDate { get; set; }
 
     public virtual ICollection<TbSalesInvoiceItem> TbSalesInvoiceItems { get; set; } = new List<TbSalesInvoiceItem>();
 }

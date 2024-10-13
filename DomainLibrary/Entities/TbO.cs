@@ -13,13 +13,13 @@ public partial class TbO
 
     public bool ShowInHomePage { get; set; }
 
-    public int CurrentState { get; set; }
+    public bool CurrentState { get; set; }
 
-    public DateOnly CreatedDate { get; set; }
+    public DateTime CreatedDate { get; set; }
 
     public string CreatedBy { get; set; } = null!;
 
-    public DateOnly? UpdatedDate { get; set; }
+    public DateTime? UpdatedDate { get; set; }
 
     public string? UpdatedBy { get; set; }
 

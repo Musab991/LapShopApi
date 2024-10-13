@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BuisnessLibrary.Dto
+namespace BuisnessLibrary.Dto.Item
 {
     public class ItemDto
     {
 
-        public int ItemId {  get; set; }
+        public int ItemId { get; set; }
 
         public string ItemName { get; set; } = null!;
 
@@ -25,18 +25,20 @@ namespace BuisnessLibrary.Dto
         public string ScreenSize { get; set; } = null!;
         public string? Weight { get; set; }
 
-        public int OsName { get; set; }
+        public string OsName { get; set; } = null!;
 
-        public int GpuName { get; set; }
+        public string GpuName { get; set; } = null!;
 
-        public int ProcessorName { get; set; }
+        public string ProcessorName { get; set; } = null!;
 
-        public int HardDiskName { get; set; }
-        public int ScreenResolution { get; set; }
+        public string HardDiskName { get; set; } = null!;
+        public string ScreenResolution { get; set; } = null!;
         public int Ram { get; set; }
 
-        List<string>listImages { get; set; }
+        public List<string> listImages { get; set; } = new List<string>();
 
 
     }
+
+
 }

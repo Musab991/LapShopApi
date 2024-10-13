@@ -1,24 +1,16 @@
-﻿using AutoMapper;
-using BuisnessLibrary.Bl.UnitOfWork.Interface;
-using BuisnessLibrary.Dto.Category;
-using BuisnessLibrary.Dto.Category;
-using BuisnessLibrary.Dto.Category;
-using DomainLibrary.Constants;
-using DomainLibrary.Entities;
-using DomainLibrary.Generic;
-using LapShop.Model.Api;
-using Microsoft.AspNetCore.Mvc;
+﻿
+using BuisnessLibrary.Dto.Os;
 
 namespace LapShop.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class OsController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _Mapper;
 
-        public CategoryController(IUnitOfWork unitOfWork, IMapper mapper)
+        public OsController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _Mapper = mapper;
@@ -26,38 +18,51 @@ namespace LapShop.Api.Controllers
         }
 
         /// <summary>
-        /// Get a specific category by its ID.
+        /// Get a specific Os by its ID.
         /// </summary>
-        /// <param name="id">The ID of the category to retrieve.</param>
-        /// <returns>A specific category.</returns>
+        /// <param name="id">The ID of the Os to retrieve.</param>
+        /// <returns>A specific Os.</returns>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(int id)
         {
-            var category = await _unitOfWork.Categories.FindOneAsync(it => it.CategoryId == id);
-
-            if (category == null)
+            try
             {
-                var errorResponse = new ApiResponse(null, ResponseStatus.NotFound)
+
+                var Os = await _unitOfWork.Os.FindOneAsync(it => it.OsId == id);
+
+                if (Os == null)
                 {
-                    Errors = new List<string> { "category not found" }
+                    var errorResponse = new ApiResponse(null, ResponseStatus.NotFound)
+                    {
+                        Errors = new List<string> { "Os not found" }
+                    };
+
+                    return NotFound(errorResponse);  // Return 404 with error message
+
+                }
+
+                // If found, return the Os wrapped in ApiResponse
+                var successResponse = new ApiResponse(Os, ResponseStatus.Success);
+                return Ok(successResponse);  // Return 200 with the Os data
+            }
+            catch (Exception ex)
+            {
+
+                var errorResponse = new ApiResponse(null, ResponseStatus.Error)
+                {
+                    Errors = new List<string> { ex.Message }
                 };
 
-                return NotFound(errorResponse);  // Return 404 with error message
+
+                return StatusCode(StatusCodes.Status500InternalServerError, errorResponse);
 
             }
-
-
-
-            // If found, return the category wrapped in ApiResponse
-            var successResponse = new ApiResponse(category, ResponseStatus.Success);
-            return Ok(successResponse);  // Return 200 with the category data
-
         }
 
         /// <summary>
-        /// Get all categories with pagination.
+        /// Get all Os with pagination.
         /// </summary>
         /// <param name="skip">The number of records to skip (for pagination).</param>
         /// <param name="take">The number of records to take (for pagination).</param>
@@ -75,25 +80,26 @@ namespace LapShop.Api.Controllers
                 int takeValue = take ?? 10;  // Default to 10 if not provided
 
                 // Call the pagination function from your repository, passing the skip and take values
-                var paginatedCategories = await _unitOfWork.Categories.FindAsync(null, skipValue, takeValue, orderBy: cat => cat.CategoryName,
+                var paginatedOss = await _unitOfWork.Os
+                    .FindAsync(null, skipValue, takeValue, orderBy: cat => cat.OsName,
                     orderByDirection: OrderBy.Ascending, null);
 
 
-                IEnumerable<CategoryDto> listPaginatedCategoriesDto =
-                    CategoryDtoMethods.convertCategoriesToListOfCategoriesDto(paginatedCategories);
+                IEnumerable<OsDto> listPaginatedOssDto =
+                    OsDtoMethods.convertOssToListOfOssDto(paginatedOss);
 
-                if (listPaginatedCategoriesDto == null || listPaginatedCategoriesDto.Count() == 0)
+                if (listPaginatedOssDto == null || listPaginatedOssDto.Count() == 0)
                 {
                     var errorResponse = new ApiResponse(null, ResponseStatus.NotFound)
                     {
-                        Errors = new List<string> { "Categories not found" }
+                        Errors = new List<string> { "Oss not found" }
                     };
 
                 }
 
 
                 // Return the paginated result wrapped in an API response
-                var response = new ApiResponse(listPaginatedCategoriesDto, ResponseStatus.Success);
+                var response = new ApiResponse(listPaginatedOssDto, ResponseStatus.Success);
                 return Ok(response);
 
             }
@@ -112,28 +118,28 @@ namespace LapShop.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddNewCategory([FromBody] CategoryAddDto categoryDto)
+        public async Task<IActionResult> AddNewOs([FromBody] OsAddDto OsDto)
         {
 
             try
             {
-             
+
 
                 if (ModelState.IsValid)
                 {
-                    // Map CategoryAddDto to TbCategory
-                    var category = _Mapper.Map<TbCategory>(categoryDto);
+                    // Map OsAddDto to TbOs
+                    var Os = _Mapper.Map<TbO>(OsDto);
 
-                    await _unitOfWork.Categories.AddAsync(category);
-                   
+                    await _unitOfWork.Os.AddAsync(Os);
+
                     await _unitOfWork.SaveAsync();
 
 
-                    return Ok(new ApiResponse("NewCategoryId is : " + category.CategoryId, ResponseStatus.Success));
+                    return Ok(new ApiResponse("New Os Id is : " + Os.OsId, ResponseStatus.Success));
 
                 }
 
-                return BadRequest(new ApiResponse(categoryDto, ResponseStatus.NotValid));
+                return BadRequest(new ApiResponse(OsDto, ResponseStatus.NotValid));
 
             }
 
@@ -153,38 +159,38 @@ namespace LapShop.Api.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateCategory([FromBody] CategoryUpdateDto updateCategoryDto)
+        public async Task<IActionResult> UpdateOs([FromBody] OsUpdateDto updateOsDto)
         {
             try
             {
-             
+
 
                 if (ModelState.IsValid)
                 {
 
                     // Retrieve existing item from the database
-                    var existingCategory = await _unitOfWork.Categories.FindOneAsync(it => it.CategoryId == updateCategoryDto.CategoryId);
+                    var existingOs = await _unitOfWork.Os.FindOneAsync(it => it.OsId == updateOsDto.OsId);
 
-                    if (existingCategory == null)
+                    if (existingOs == null)
                     {
 
                         return NotFound(new ApiResponse(null, ResponseStatus.NotFound));
 
                     }
 
-                    // Map updateCategoryDto to existingCategory
-                    _Mapper.Map(updateCategoryDto, existingCategory);
+                    // Map updateOsDto to existingOs
+                    _Mapper.Map(updateOsDto, existingOs);
 
-                    _unitOfWork.Categories.Update(existingCategory);
+                    _unitOfWork.Os.Update(existingOs);
 
-                       await _unitOfWork.SaveAsync();
+                    await _unitOfWork.SaveAsync();
 
 
-                    return Ok(new ApiResponse(updateCategoryDto, ResponseStatus.Success));
+                    return Ok(new ApiResponse(updateOsDto, ResponseStatus.Success));
 
                 }
 
-                return BadRequest(new ApiResponse(updateCategoryDto, ResponseStatus.NotValid));
+                return BadRequest(new ApiResponse(updateOsDto, ResponseStatus.NotValid));
 
             }
 
@@ -204,32 +210,32 @@ namespace LapShop.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCategory([FromRoute] int id)
+        public async Task<IActionResult> DeleteOs([FromRoute] int id)
         {
 
             //check item is exists 
             try
             {
 
-                var existingCategory = await _unitOfWork.Categories.FindOneAsync(it => it.CategoryId == id);
+                var existingOs = await _unitOfWork.Os.FindOneAsync(it => it.OsId == id);
 
 
-                if (existingCategory == null)
+                if (existingOs == null)
                 {
                     return NotFound(new ApiResponse(null, ResponseStatus.NotFound));
                 }
 
-                _unitOfWork.Categories.Delete(existingCategory);
+                _unitOfWork.Os.Delete(existingOs);
 
-         
+
                 await _unitOfWork.SaveAsync();
 
 
-                return Ok(new ApiResponse($"Category with Id:[{id}] Was deleted succesfully", ResponseStatus.Success)); // Return 204 No Content
+                return Ok(new ApiResponse($"Os with Id:[{id}] Was deleted succesfully", ResponseStatus.Success)); // Return 204 No Content
             }
             catch (Exception ex)
             {
-            
+
 
                 var errorResponse = new ApiResponse(null, ResponseStatus.Error)
                 {

@@ -13,12 +13,12 @@ namespace DomainLibrary.Generic
         IQueryable<T> GetAll(string[]? includes = null);
         T FindOne(Expression<Func<T, bool>> Filter, string[]? includes = null);
         Task<T> FindOneAsync(Expression<Func<T, bool>> Filter, string[]? includes = null);
-     
         public IEnumerable<T> Find(Expression<Func<T, bool>> Filter,
           Expression<Func<T, object>> orderBy = null, string orderByDirection = OrderBy.Ascending, 
           int? skip=null, int? take= null, string[]? includes = null);
-        public Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> Filter, int? skip, int? take,
+        public Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>>? Filter, int? skip, int? take,
         Expression<Func<T, object>> orderBy = null, string orderByDirection = OrderBy.Ascending, string[]? includes = null);
+         Task<IReadOnlyList<T>> FindAsync(Expression<Func<T, bool>>? filter, string[]? includes = null);
         void Add(T entity);
         Task<T>AddAsync(T entity);
         void AddRange(IEnumerable<T> entities);

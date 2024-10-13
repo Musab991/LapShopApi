@@ -15,7 +15,7 @@ public partial class TbIndexViewSetting
 
     public string CreatedBy { get; set; } = null!;
 
-    public DateOnly CreatedDate { get; set; }
+    public DateTime CreatedDate { get; set; }
 
     public bool CurrentState { get; set; }
 

@@ -11,7 +11,7 @@ public partial class TbItemDiscount
 
     public decimal DiscountPercent { get; set; }
 
-    public DateOnly EndDate { get; set; }
+    public DateTime EndDate { get; set; }
 
     public virtual TbItem Item { get; set; } = null!;
 }

@@ -5,7 +5,7 @@ namespace DomainLibrary.Entities;
 
 public partial class TbGpu
 {
-    public int Gpuid { get; set; }
+    public int GpuId { get; set; }
 
     public string Gpuname { get; set; } = null!;
 

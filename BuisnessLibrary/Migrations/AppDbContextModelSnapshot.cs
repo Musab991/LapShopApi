@@ -294,8 +294,8 @@ namespace BuisnessLibrary.Migrations
                         .HasColumnType("nvarchar(200)")
                         .HasDefaultValue("");
 
-                    b.Property<DateOnly>("CreatedDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("CurrentState")
                         .HasColumnType("bit");
@@ -314,8 +314,8 @@ namespace BuisnessLibrary.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<DateOnly?>("UpdatedDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("CategoryId");
 
@@ -342,12 +342,12 @@ namespace BuisnessLibrary.Migrations
 
             modelBuilder.Entity("DomainLibrary.Entities.TbGpu", b =>
                 {
-                    b.Property<int>("Gpuid")
+                    b.Property<int>("GpuId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("GPUId");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Gpuid"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GpuId"));
 
                     b.Property<string>("Gpuname")
                         .IsRequired()
@@ -356,7 +356,7 @@ namespace BuisnessLibrary.Migrations
                         .HasColumnType("varchar(250)")
                         .HasColumnName("GPUName");
 
-                    b.HasKey("Gpuid");
+                    b.HasKey("GpuId");
 
                     b.ToTable("TbGPUs", (string)null);
                 });
@@ -393,8 +393,8 @@ namespace BuisnessLibrary.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<DateOnly>("CreatedDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("CurrentState")
                         .HasColumnType("bit");
@@ -442,10 +442,10 @@ namespace BuisnessLibrary.Migrations
                         .HasColumnType("nvarchar(200)")
                         .HasDefaultValue("");
 
-                    b.Property<DateOnly>("CreatedDate")
+                    b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("date")
-                        .HasDefaultValue(new DateOnly(2020, 9, 20));
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2020, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified));
 
                     b.Property<int>("CurrentState")
                         .HasColumnType("int");
@@ -457,7 +457,7 @@ namespace BuisnessLibrary.Migrations
                         .HasMaxLength(400)
                         .HasColumnType("nvarchar(400)");
 
-                    b.Property<int>("Gpuid")
+                    b.Property<int>("GpuId")
                         .HasColumnType("int")
                         .HasColumnName("GPUId");
 
@@ -507,8 +507,8 @@ namespace BuisnessLibrary.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<DateOnly?>("UpdatedDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Weight")
                         .HasMaxLength(200)
@@ -518,7 +518,7 @@ namespace BuisnessLibrary.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex(new[] { "Gpuid" }, "IX_TbItems_GPUId");
+                    b.HasIndex(new[] { "GpuId" }, "IX_TbItems_GPUId");
 
                     b.HasIndex(new[] { "HardDiskId" }, "IX_TbItems_HardDiskId");
 
@@ -546,8 +546,8 @@ namespace BuisnessLibrary.Migrations
                     b.Property<decimal>("DiscountPercent")
                         .HasColumnType("decimal(18, 2)");
 
-                    b.Property<DateOnly>("EndDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("ItemId")
                         .HasColumnType("int");
@@ -595,11 +595,11 @@ namespace BuisnessLibrary.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<DateOnly>("CreatedDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<int>("CurrentState")
-                        .HasColumnType("int");
+                    b.Property<bool>("CurrentState")
+                        .HasColumnType("bit");
 
                     b.Property<string>("ImageName")
                         .HasMaxLength(200)
@@ -614,8 +614,8 @@ namespace BuisnessLibrary.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<DateOnly?>("UpdatedDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("ItemTypeId");
 
@@ -635,11 +635,11 @@ namespace BuisnessLibrary.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<DateOnly>("CreatedDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<int>("CurrentState")
-                        .HasColumnType("int");
+                    b.Property<bool>("CurrentState")
+                        .HasColumnType("bit");
 
                     b.Property<string>("ImageName")
                         .IsRequired()
@@ -658,8 +658,8 @@ namespace BuisnessLibrary.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<DateOnly?>("UpdatedDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("OsId");
 
@@ -777,8 +777,8 @@ namespace BuisnessLibrary.Migrations
                         .HasColumnType("nvarchar(200)")
                         .HasDefaultValue("");
 
-                    b.Property<DateOnly>("CreatedDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("CurrentState")
                         .HasColumnType("int");
@@ -805,8 +805,8 @@ namespace BuisnessLibrary.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<DateOnly?>("UpdatedDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("InvoiceId");
 
@@ -963,8 +963,8 @@ namespace BuisnessLibrary.Migrations
                         .HasColumnType("nvarchar(200)")
                         .HasDefaultValue("");
 
-                    b.Property<DateOnly>("CreatedDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("CurrentState")
                         .HasColumnType("bit");
@@ -1074,7 +1074,7 @@ namespace BuisnessLibrary.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Gpuid")
+                    b.Property<int>("GpuId")
                         .HasColumnType("int")
                         .HasColumnName("GPUId");
 
@@ -1356,7 +1356,7 @@ namespace BuisnessLibrary.Migrations
 
                     b.HasOne("DomainLibrary.Entities.TbGpu", "Gpu")
                         .WithMany("TbItems")
-                        .HasForeignKey("Gpuid")
+                        .HasForeignKey("GpuId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_TbItems_TbGPUs");

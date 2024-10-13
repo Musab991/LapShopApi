@@ -5,6 +5,9 @@ using DomainLibrary.Generic;
 using Microsoft.EntityFrameworkCore;
 using BuisnessLibrary.Bl.UnitOfWork.Interface;
 using BuisnessLibrary.Bl.UnitOfWork;
+using Microsoft.AspNetCore.Hosting;
+using AutoMapper;
+using LapShop.Api.AutoMapping;
 namespace LapShop.Api
 {
     public class Program
@@ -19,6 +22,7 @@ namespace LapShop.Api
                 .AddInterceptors(new SoftDeleteInterceptor()));// Add services to the container.
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddAutoMapper(typeof(MappingProfile)); // Automatically scan for profiles
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

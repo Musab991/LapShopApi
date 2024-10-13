@@ -16,7 +16,7 @@ public partial class AppDbContext : DbContext
         : base(options)
     {
     }
-
+ 
     public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
 
     public virtual DbSet<AspNetRoleClaim> AspNetRoleClaims { get; set; }
@@ -99,6 +99,7 @@ public partial class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+
         modelBuilder.UseCollation("SQL_Latin1_General_CP1_CI_AS");
 
         modelBuilder.Entity<AspNetRole>(entity =>
@@ -215,11 +216,11 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<TbGpu>(entity =>
         {
-            entity.HasKey(e => e.Gpuid);
+            entity.HasKey(e => e.GpuId);
 
             entity.ToTable("TbGPUs");
 
-            entity.Property(e => e.Gpuid).HasColumnName("GPUId");
+            entity.Property(e => e.GpuId).HasColumnName("GPUId");
             entity.Property(e => e.Gpuname)
                 .HasMaxLength(250)
                 .IsUnicode(false)
@@ -250,7 +251,7 @@ public partial class AppDbContext : DbContext
         {
             entity.HasKey(e => e.ItemId);
 
-            entity.HasIndex(e => e.Gpuid, "IX_TbItems_GPUId");
+            entity.HasIndex(e => e.GpuId, "IX_TbItems_GPUId");
 
             entity.HasIndex(e => e.HardDiskId, "IX_TbItems_HardDiskId");
 
@@ -267,9 +268,9 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.CreatedBy)
                 .HasMaxLength(200)
                 .HasDefaultValue("");
-            entity.Property(e => e.CreatedDate).HasDefaultValue(new DateOnly(2020, 9, 20));
+            entity.Property(e => e.CreatedDate).HasDefaultValue(new DateTime(2020, 9, 20));
             entity.Property(e => e.Description).HasMaxLength(400);
-            entity.Property(e => e.Gpuid).HasColumnName("GPUId");
+            entity.Property(e => e.GpuId).HasColumnName("GPUId");
             entity.Property(e => e.ImageName).HasMaxLength(200);
             entity.Property(e => e.ItemName).HasMaxLength(100);
             entity.Property(e => e.PurchasePrice).HasColumnType("decimal(8, 2)");
@@ -285,7 +286,7 @@ public partial class AppDbContext : DbContext
                 .HasConstraintName("FK_TbItems_TbCategories");
 
             entity.HasOne(d => d.Gpu).WithMany(p => p.TbItems)
-                .HasForeignKey(d => d.Gpuid)
+                .HasForeignKey(d => d.GpuId)
                 .HasConstraintName("FK_TbItems_TbGPUs");
 
             entity.HasOne(d => d.HardDisk).WithMany(p => p.TbItems)
@@ -536,7 +537,7 @@ public partial class AppDbContext : DbContext
                 .ToView("VwItems");
 
             entity.Property(e => e.CategoryName).HasMaxLength(100);
-            entity.Property(e => e.Gpuid).HasColumnName("GPUId");
+            entity.Property(e => e.GpuId).HasColumnName("GPUId");
             entity.Property(e => e.Gpuname)
                 .HasMaxLength(250)
                 .IsUnicode(false)

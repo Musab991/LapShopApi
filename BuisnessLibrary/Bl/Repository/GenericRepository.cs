@@ -20,7 +20,6 @@ namespace BuisnessLibrary.Bl.Repository
                 throw new ArgumentNullException(nameof(entity));
             }
             _dbSet.Add(entity);
-            _appDbContext.SaveChanges();
         }
         public async Task<TEntity> AddAsync(TEntity entity)
         {
@@ -29,7 +28,6 @@ namespace BuisnessLibrary.Bl.Repository
                 throw new ArgumentNullException(nameof(entity));
             }
             await _dbSet.AddAsync(entity);
-            await _appDbContext.SaveChangesAsync();
 
             return entity;
         }
@@ -41,7 +39,6 @@ namespace BuisnessLibrary.Bl.Repository
             }
             _dbSet.AddRange(entities);
 
-                _appDbContext.SaveChanges();
         }
         public async Task AddRangeAsync(IEnumerable<TEntity> entities)
         {
@@ -51,7 +48,6 @@ namespace BuisnessLibrary.Bl.Repository
             }
 
             await _dbSet.AddRangeAsync(entities);
-            await _appDbContext.SaveChangesAsync();
         }
 
         public void Delete(TEntity entity)
@@ -61,13 +57,11 @@ namespace BuisnessLibrary.Bl.Repository
                 throw new ArgumentNullException(nameof(entity));
             }
             _dbSet.Remove(entity);
-            _appDbContext.SaveChanges();
         }
         public void DeleteRange(Expression<Func<TEntity, bool>> filter)
         {
             var entities = Find(filter);
             _dbSet.RemoveRange(entities);
-            _appDbContext.SaveChanges();
         }
 
         public TEntity FindOne(Expression<Func<TEntity, bool>> filter, string[]? includes = null)
@@ -84,10 +78,10 @@ namespace BuisnessLibrary.Bl.Repository
         public async Task<TEntity> FindOneAsync(Expression<Func<TEntity, bool>> filter, string[]? includes = null)
              => await BuildQuery(filter, null, null, null, null, includes).SingleOrDefaultAsync();
 
-        public async Task<IReadOnlyList<TEntity>> FindAsync(Expression<Func<TEntity, bool>> filter, string[]? includes = null)
+        public async Task<IReadOnlyList<TEntity>> FindAsync(Expression<Func<TEntity, bool>> ?filter, string[]? includes = null)
                       => await BuildQuery(filter, null, null, null, null, includes).ToListAsync();
     
-        public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> filter, int? skip, int? take,
+        public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>>? filter, int? skip, int? take,
            Expression<Func<TEntity, object>> ?orderBy = null, string orderByDirection = OrderBy.Ascending, string[]? includes = null)
             =>await BuildQuery(filter,orderBy, orderByDirection, skip,take,includes).ToListAsync();
 
@@ -100,8 +94,8 @@ namespace BuisnessLibrary.Bl.Repository
         public void Update(TEntity entity)
         {
             _dbSet.Update(entity);
-            _appDbContext.SaveChanges();
         }
+       
 
         public bool Any(Expression<Func<TEntity, bool>> filter)
         => _dbSet.Any(filter);

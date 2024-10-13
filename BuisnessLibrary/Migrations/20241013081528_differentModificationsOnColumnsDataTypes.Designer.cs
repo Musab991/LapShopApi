@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BuisnessLibrary.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241009083743_inital")]
-    partial class inital
+    [Migration("20241013081528_differentModificationsOnColumnsDataTypes")]
+    partial class differentModificationsOnColumnsDataTypes
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -298,7 +298,7 @@ namespace BuisnessLibrary.Migrations
                         .HasDefaultValue("");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("CurrentState")
                         .HasColumnType("bit");
@@ -318,7 +318,7 @@ namespace BuisnessLibrary.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime2");
 
                     b.HasKey("CategoryId");
 
@@ -397,7 +397,7 @@ namespace BuisnessLibrary.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("CurrentState")
                         .HasColumnType("bit");
@@ -447,8 +447,8 @@ namespace BuisnessLibrary.Migrations
 
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("date")
-                        .HasDefaultValue(new DateTime(2020, 9, 20));
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2020, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified));
 
                     b.Property<int>("CurrentState")
                         .HasColumnType("int");
@@ -511,7 +511,7 @@ namespace BuisnessLibrary.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Weight")
                         .HasMaxLength(200)
@@ -550,7 +550,7 @@ namespace BuisnessLibrary.Migrations
                         .HasColumnType("decimal(18, 2)");
 
                     b.Property<DateTime>("EndDate")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("ItemId")
                         .HasColumnType("int");
@@ -599,10 +599,10 @@ namespace BuisnessLibrary.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime2");
 
-                    b.Property<int>("CurrentState")
-                        .HasColumnType("int");
+                    b.Property<bool>("CurrentState")
+                        .HasColumnType("bit");
 
                     b.Property<string>("ImageName")
                         .HasMaxLength(200)
@@ -618,7 +618,7 @@ namespace BuisnessLibrary.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime2");
 
                     b.HasKey("ItemTypeId");
 
@@ -639,10 +639,10 @@ namespace BuisnessLibrary.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime2");
 
-                    b.Property<int>("CurrentState")
-                        .HasColumnType("int");
+                    b.Property<bool>("CurrentState")
+                        .HasColumnType("bit");
 
                     b.Property<string>("ImageName")
                         .IsRequired()
@@ -662,7 +662,7 @@ namespace BuisnessLibrary.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime2");
 
                     b.HasKey("OsId");
 
@@ -781,7 +781,7 @@ namespace BuisnessLibrary.Migrations
                         .HasDefaultValue("");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("CurrentState")
                         .HasColumnType("int");
@@ -809,7 +809,7 @@ namespace BuisnessLibrary.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime2");
 
                     b.HasKey("InvoiceId");
 
@@ -967,7 +967,7 @@ namespace BuisnessLibrary.Migrations
                         .HasDefaultValue("");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("CurrentState")
                         .HasColumnType("bit");
