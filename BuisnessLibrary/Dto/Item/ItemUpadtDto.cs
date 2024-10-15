@@ -2,7 +2,7 @@
 
 namespace BuisnessLibrary.Dto.Item
 {
-    public class ItemUpadtDto
+    public class ItemUpdateDto
     {
         [Required]
         public int ItemId {  get; set; }

@@ -7,7 +7,6 @@ namespace LapShop.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-        [Authorize]
     public class ItemController : ControllerBase
     {
 
@@ -161,7 +160,7 @@ namespace LapShop.Api.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateItem([FromBody]ItemUpadtDto updateItemDto)
+        public async Task<IActionResult> UpdateItem([FromBody]ItemUpdateDto updateItemDto)
         {
             try
             {

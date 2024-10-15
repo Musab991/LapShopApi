@@ -48,7 +48,7 @@ namespace LapShop.Api.Controllers
                 {
                     var errorResponse = new ApiResponse(null, ResponseStatus.NotFound)
                     {
-                        Errors = new List<string> { "Item not found" }
+                        Errors = new List<string> { "Invoice not found" }
                     };
 
                     return NotFound(errorResponse);  // Return 404 with error message
@@ -79,11 +79,11 @@ namespace LapShop.Api.Controllers
         }
 
         /// <summary>
-        /// Get all Items with pagination.
+        /// Get all Invoices with pagination.
         /// </summary>
         /// <param name="skip">The number of records to skip (for pagination).</param>
         /// <param name="take">The number of records to take (for pagination).</param>
-        /// <returns>A paginated list of Items.</returns>
+        /// <returns>A paginated list of Invoices.</returns>
         /// 
         [HttpGet("")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -134,7 +134,7 @@ namespace LapShop.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddNewItem([FromBody] ItemAddDto itemDto)
+        public async Task<IActionResult> AddNew([FromBody] SalesInvoiceAddDto invoiceDto)
         {
 
             try
@@ -144,14 +144,15 @@ namespace LapShop.Api.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    // Map ItemAddDto to TbItem
-                    var item = _Mapper.Map<TbItem>(itemDto);
+                    // Map InvoiceAddDto to TbSalesInvoice
+                    TbSalesInvoice salesInvoice = _Mapper.Map<TbSalesInvoice>(invoiceDto);
 
-                    await _unitOfWork.Items.AddAsync(item);
+                    await _unitOfWork.SalesInvoices.AddAsync(salesInvoice);
                     await _unitOfWork.SaveAsync();
 
-                    // Handle the images separately
-                    await _unitOfWork.ItemImages.UploadImages(item.ItemId, itemDto.ListImages);
+                    // Handle the items of invoice separately
+                    await _unitOfWork.SalesInvoiceItems
+                        .SyncSalesInvoiceItemsWithDatabase(salesInvoice.InvoiceId, invoiceDto.Items);
 
                     await _unitOfWork.SaveAsync();
 
@@ -159,11 +160,12 @@ namespace LapShop.Api.Controllers
                     await _unitOfWork.CommitAsync();
 
 
-                    return Ok(new ApiResponse("NewItemId is : " + item.ItemId, ResponseStatus.Success));
+                    return Ok(new ApiResponse("New invoice Id is : [ " + salesInvoice.InvoiceId+" ]",
+                        ResponseStatus.Success));
 
                 }
 
-                return BadRequest(new ApiResponse(itemDto, ResponseStatus.NotValid));
+                return BadRequest(new ApiResponse(invoiceDto, ResponseStatus.NotValid));
 
             }
 
@@ -184,7 +186,7 @@ namespace LapShop.Api.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateItem([FromBody] ItemUpadtDto updateItemDto)
+        public async Task<IActionResult> Update([FromBody] SalesInvoiceUpdateDto invoiceDto)
         {
             try
             {
@@ -194,25 +196,26 @@ namespace LapShop.Api.Controllers
                 if (ModelState.IsValid)
                 {
 
-                    // Retrieve existing item from the database
-                    var existingItem = await _unitOfWork.Items.FindOneAsync(it => it.ItemId == updateItemDto.ItemId);
+                    // Retrieve existing Invoice from the database
+                    var existingInvoice = await _unitOfWork.SalesInvoices.FindOneAsync(inv => inv.InvoiceId== invoiceDto.InvoiceId);
 
-                    if (existingItem == null)
+                    if (existingInvoice == null)
                     {
 
                         return NotFound(new ApiResponse(null, ResponseStatus.NotFound));
 
                     }
 
-                    // Map updateItemDto to existingItem
-                    _Mapper.Map(updateItemDto, existingItem);
+                    // Map updateItemDto to existingInvoice
+                    _Mapper.Map(invoiceDto, existingInvoice);
 
-                    _unitOfWork.Items.Update(existingItem);
+                    _unitOfWork.SalesInvoices.Update(existingInvoice);
 
                     await _unitOfWork.SaveAsync();
 
-                    // Handle the images separately
-                    await _unitOfWork.ItemImages.UploadImages(updateItemDto.ItemId, updateItemDto.ListImages);
+                    // Handle the items of invoice separately
+                    await _unitOfWork.SalesInvoiceItems
+                        .SyncSalesInvoiceItemsWithDatabase(existingInvoice.InvoiceId, invoiceDto.Items);
 
                     await _unitOfWork.SaveAsync();
 
@@ -220,11 +223,11 @@ namespace LapShop.Api.Controllers
                     await _unitOfWork.CommitAsync();
 
 
-                    return Ok(new ApiResponse(updateItemDto, ResponseStatus.Success));
+                    return Ok(new ApiResponse(invoiceDto, ResponseStatus.Success));
 
                 }
 
-                return BadRequest(new ApiResponse(updateItemDto, ResponseStatus.NotValid));
+                return BadRequest(new ApiResponse(invoiceDto, ResponseStatus.NotValid));
 
             }
 
@@ -245,33 +248,34 @@ namespace LapShop.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteItem([FromRoute] int id)
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
 
             //check item is exists 
             try
             {
 
-                var existingItem = await _unitOfWork.Items.FindOneAsync(it => it.ItemId == id);
+                var existingInvoice = await _unitOfWork.SalesInvoices.FindOneAsync(it => it.InvoiceId == id);
 
 
-                if (existingItem == null)
+                if (existingInvoice == null)
                 {
                     return NotFound(new ApiResponse(null, ResponseStatus.NotFound));
                 }
 
-                _unitOfWork.Items.Delete(existingItem);
+                _unitOfWork.SalesInvoices.Delete(existingInvoice);
 
 
-                // Delete associated images
-                _unitOfWork.ItemImages.DeleteRange(img => img.ItemId == id);
+                // Delete associated items with invoice
+                //it search for an entity (itemInvoice) that contains this invoice id -.-
+                _unitOfWork.SalesInvoiceItems.DeleteRange(invoice => invoice.InvoiceId == id);
 
                 await _unitOfWork.SaveAsync();
 
                 // Commit the transaction
                 await _unitOfWork.CommitAsync();
 
-                return Ok(new ApiResponse($"Item with Id:[{id}] Was deleted succesfully", ResponseStatus.Success)); // Return 204 No Content
+                return Ok(new ApiResponse($"Invoice with Id:[{id}] Was deleted succesfully", ResponseStatus.Success)); // Return 204 No Content
             }
             catch (Exception ex)
             {

@@ -23,6 +23,7 @@ namespace BuisnessLibrary.Bl.UnitOfWork
         public IGenericRepository<TbScreenResolution> ScreenResolutions{ get; }
         public IGenericRepository<TbRam> Rams{ get; }
         public IGenericRepository<TbSalesInvoice> SalesInvoices { get; }
+        public ISalesInvoiceItemRepository SalesInvoiceItems { get; private set; }
 
         private string _errorMessage = string.Empty;
         // Use the correct type for EF Core transactions
@@ -41,6 +42,7 @@ namespace BuisnessLibrary.Bl.UnitOfWork
             ScreenResolutions = new GenericRepository<TbScreenResolution>(_context);
             Rams = new GenericRepository<TbRam>(_context);
             SalesInvoices = new GenericRepository<TbSalesInvoice>(_context);
+            SalesInvoiceItems = new SalesInvoiceItemRepository(_context);
             ItemImages = new ItemImageRepository(_context);
 
         }

@@ -19,7 +19,7 @@ namespace LapShop.Api.AutoMapping
                 .ForMember(dest => dest.DateDeleted, opt => opt.Ignore())
                 .ForMember(dest => dest.IsDeleted, opt => opt.MapFrom(src => false));
 
-            CreateMap<ItemUpadtDto, TbItem>()
+            CreateMap<ItemUpdateDto, TbItem>()
                 .ForMember(dest => dest.TbItemImages, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedBy, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedDate, opt => opt.Ignore())

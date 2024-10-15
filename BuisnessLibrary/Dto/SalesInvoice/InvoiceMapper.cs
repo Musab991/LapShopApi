@@ -1,5 +1,6 @@
 ﻿using BuisnessLibrary.Dto.Item;
 using DomainLibrary.Entities;
+using Microsoft.AspNetCore.Components.Web.Virtualization;
 
 
 namespace BuisnessLibrary.Dto.SalesInvoice
@@ -28,7 +29,7 @@ namespace BuisnessLibrary.Dto.SalesInvoice
                 CurrentState = invoice.CurrentState,
                 UpdatedBy = invoice.UpdatedBy,
                 UpdatedDate = invoice.UpdatedDate,
-                Items = invoice.TbSalesInvoiceItems.Select(i => ConvertToItemDto(i)).ToList(),
+                Items = invoiceItems,
                 TotalInvoicePrice = invoiceItems.Sum(i => i.Total) // Use LINQ to calculate total
             };
            
@@ -43,32 +44,27 @@ namespace BuisnessLibrary.Dto.SalesInvoice
                 // Optionally return a default DTO or handle the case as needed
                 return new List<SalesInvoiceDto>();
             }
-            //this will return for me each invoice items ,but all of them 
-          var voices=  listInvoices.Select(invoice => invoice.TbSalesInvoiceItems.Select(i => ConvertToItemDto(i)).ToList());
 
-            //return list (select) of list (select) 
-            //list of invoices of list of items 
-            //2d 
-            // I
-            //var invoiceItems = invoice.TbSalesInvoiceItems.Select(i => ConvertToItemDto(i)).ToList();
+            var invoices = listInvoices.Select(voic => new SalesInvoiceDto()
+            {
+                CreatedBy = voic.CreatedBy,
+                CreatedDate = voic.CreatedDate,
+                CurrentState = voic.CurrentState,
+                DeliveryDate = voic.DelivryDate,
+                InvoiceDate = voic.InvoiceDate,
+                InvoiceId = voic.InvoiceId,
+                Notes = voic.Notes,
+                Items = voic.TbSalesInvoiceItems.Select(i => ConvertToItemDto(i)).ToList(),
+                TotalInvoicePrice = voic.TbSalesInvoiceItems.Sum(i=>ConvertToItemDto(i).Total),
+                UpdatedBy = voic.UpdatedBy,
+                UpdatedDate = voic.UpdatedDate
 
-            //var invoiceDto = new SalesInvoiceDto
-            //{
-            //    InvoiceId = invoice.InvoiceId,
-            //    InvoiceDate = invoice.InvoiceDate,
-            //    DeliveryDate = invoice.DelivryDate,
-            //    Notes = invoice.Notes,
-            //    CreatedBy = invoice.CreatedBy,
-            //    CreatedDate = invoice.InvoiceDate,
-            //    CurrentState = invoice.CurrentState,
-            //    UpdatedBy = invoice.UpdatedBy,
-            //    UpdatedDate = invoice.UpdatedDate,
-            //    Items = invoice.TbSalesInvoiceItems.Select(i => ConvertToItemDto(i)).ToList(),
-            //    TotalInvoicePrice = invoiceItems.Sum(i => i.Total) // Use LINQ to calculate total
-            //};
+            });
+
+
+            return invoices;
+
            
-
-            return null;
 
         }
 
@@ -86,5 +82,7 @@ namespace BuisnessLibrary.Dto.SalesInvoice
                 Total = total // Assign the calculated total
             };
         }
+    
     }
-    }
+    
+}

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BuisnessLibrary.Dto.Item;
+using System.ComponentModel.DataAnnotations;
 
 namespace BuisnessLibrary.Dto.SalesInvoice
 {
@@ -14,9 +15,8 @@ namespace BuisnessLibrary.Dto.SalesInvoice
         [Required]
         public int CurrentState { get; set; }
         public string? Notes{ get; set; }
-    
-        [Required]
-        public string CustomerId { get; set; }=null!;
+        public string ?CustomerId { get; set; }
+        public List<SalesInvoiceItemDto> Items { get; set; } = new List<SalesInvoiceItemDto>();
 
     }
 }

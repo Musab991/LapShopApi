@@ -23,6 +23,7 @@ namespace BuisnessLibrary.Bl.UnitOfWork.Interface
         IGenericRepository<TbScreenResolution> ScreenResolutions { get;}
         IGenericRepository<TbRam> Rams { get;}
         IGenericRepository<TbSalesInvoice> SalesInvoices { get;}
+        ISalesInvoiceItemRepository SalesInvoiceItems { get;}
         //Start the database Transaction
         void CreateTransaction();
         //Commit the database Transaction
