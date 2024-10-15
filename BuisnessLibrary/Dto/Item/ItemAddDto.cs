@@ -46,7 +46,7 @@ namespace BuisnessLibrary.Dto.Item
 
         public int ScreenResolutionId { get; set; }
         [Required]
-        public int? Ramid { get; set; }
+        public int? RamId { get; set; }
 
         [Required]
         public List<string> ListImages { get; set; } = new List<string>();

@@ -80,7 +80,7 @@ namespace LapShop.Api.Controllers
 
 
                 IEnumerable<CategoryDto> listPaginatedCategoriesDto =
-                    CategoryDtoMethods.convertCategoriesToListOfCategoriesDto(paginatedCategories);
+                    CategoryMapper.convertCategoriesToListOfCategoriesDto(paginatedCategories);
 
                 if (listPaginatedCategoriesDto == null || listPaginatedCategoriesDto.Count() == 0)
                 {

@@ -1,26 +1,18 @@
-﻿using DomainLibrary.Constants;
-using DomainLibrary.Entities;
-using Microsoft.AspNetCore.Mvc;
-using BuisnessLibrary.Bl.UnitOfWork.Interface;
-using LapShop.Model.Api;
+﻿
 using BuisnessLibrary.Dto.Item;
-using AutoMapper;
-using BuisnessLibrary.Utilities;
-using Microsoft.IdentityModel.Tokens;
-using System.Data.Entity.Validation;
-using BuisnessLibrary.Bl.Repository.Interface;
-using System.Linq.Expressions;
+using BuisnessLibrary.Dto.SalesInvoice;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LapShop.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+        [Authorize]
     public class ItemController : ControllerBase
     {
 
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _Mapper;
-
         public ItemController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
@@ -53,7 +45,7 @@ namespace LapShop.Api.Controllers
 
             }
 
-            ItemDto itemDto = ItemDtoMethods.convertItemToItemDto(item);
+            ItemDto itemDto = ItemMapper.convertItemToItemDto(item);
      
 
             // If found, return the item wrapped in ApiResponse
@@ -86,7 +78,7 @@ namespace LapShop.Api.Controllers
                       "Ram","ScreenResolution","TbItemImages"});
 
                
-                IEnumerable<ItemDto> listPaginatedItemsDto = ItemDtoMethods.convertItemsToListOfItemsDto(paginatedItems);
+                IEnumerable<ItemDto> listPaginatedItemsDto = ItemMapper.convertItemsToListOfItemsDto(paginatedItems);
 
                 if (listPaginatedItemsDto == null||listPaginatedItemsDto.Count()==0)
                 {

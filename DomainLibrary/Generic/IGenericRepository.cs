@@ -1,10 +1,5 @@
 ﻿using DomainLibrary.Constants;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DomainLibrary.Generic
 {
@@ -13,6 +8,8 @@ namespace DomainLibrary.Generic
         IQueryable<T> GetAll(string[]? includes = null);
         T FindOne(Expression<Func<T, bool>> Filter, string[]? includes = null);
         Task<T> FindOneAsync(Expression<Func<T, bool>> Filter, string[]? includes = null);
+      
+
         public IEnumerable<T> Find(Expression<Func<T, bool>> Filter,
           Expression<Func<T, object>> orderBy = null, string orderByDirection = OrderBy.Ascending, 
           int? skip=null, int? take= null, string[]? includes = null);

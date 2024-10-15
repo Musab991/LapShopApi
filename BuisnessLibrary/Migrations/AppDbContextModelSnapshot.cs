@@ -18,77 +18,12 @@ namespace BuisnessLibrary.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .UseCollation("SQL_Latin1_General_CP1_CI_AS")
-                .HasAnnotation("ProductVersion", "8.0.8")
+                .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("AspNetUserRole", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex(new[] { "RoleId" }, "IX_AspNetUserRoles_RoleId");
-
-                    b.ToTable("AspNetUserRoles", (string)null);
-                });
-
-            modelBuilder.Entity("DomainLibrary.Entities.AspNetRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex(new[] { "NormalizedName" }, "RoleNameIndex")
-                        .IsUnique()
-                        .HasFilter("([NormalizedName] IS NOT NULL)");
-
-                    b.ToTable("AspNetRoles");
-                });
-
-            modelBuilder.Entity("DomainLibrary.Entities.AspNetRoleClaim", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex(new[] { "RoleId" }, "IX_AspNetRoleClaims_RoleId");
-
-                    b.ToTable("AspNetRoleClaims");
-                });
-
-            modelBuilder.Entity("DomainLibrary.Entities.AspNetUser", b =>
+            modelBuilder.Entity("BuisnessLibrary.Bl.Account.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -97,6 +32,7 @@ namespace BuisnessLibrary.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -105,12 +41,6 @@ namespace BuisnessLibrary.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -147,131 +77,15 @@ namespace BuisnessLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex(new[] { "NormalizedEmail" }, "EmailIndex");
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
 
-                    b.HasIndex(new[] { "NormalizedUserName" }, "UserNameIndex")
+                    b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasFilter("([NormalizedUserName] IS NOT NULL)");
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("AspNetUsers");
-                });
-
-            modelBuilder.Entity("DomainLibrary.Entities.AspNetUserClaim", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex(new[] { "UserId" }, "IX_AspNetUserClaims_UserId");
-
-                    b.ToTable("AspNetUserClaims");
-                });
-
-            modelBuilder.Entity("DomainLibrary.Entities.AspNetUserLogin", b =>
-                {
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("LoginProvider", "ProviderKey");
-
-                    b.HasIndex(new[] { "UserId" }, "IX_AspNetUserLogins_UserId");
-
-                    b.ToTable("AspNetUserLogins");
-                });
-
-            modelBuilder.Entity("DomainLibrary.Entities.AspNetUserToken", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserId", "LoginProvider", "Name");
-
-                    b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("DomainLibrary.Entities.TbBusinessInfo", b =>
-                {
-                    b.Property<int>("BusinessInfoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BusinessInfoId"));
-
-                    b.Property<decimal>("Budget")
-                        .HasColumnType("decimal(8, 2)");
-
-                    b.Property<string>("BusinessCardNumber")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<int>("CutomerId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("OfficePhone")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.HasKey("BusinessInfoId");
-
-                    b.HasIndex(new[] { "CutomerId" }, "IX_TbBusinessInfo_CutomerId")
-                        .IsUnique();
-
-                    b.ToTable("TbBusinessInfo", (string)null);
-                });
-
-            modelBuilder.Entity("DomainLibrary.Entities.TbCashTransacion", b =>
-                {
-                    b.Property<int>("CashTransactionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CashTransactionId"));
-
-                    b.Property<DateTime>("CashDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<decimal>("CashValue")
-                        .HasColumnType("decimal(8, 2)");
-
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CashTransactionId");
-
-                    b.ToTable("TbCashTransacion", (string)null);
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("DomainLibrary.Entities.TbCategory", b =>
@@ -322,24 +136,6 @@ namespace BuisnessLibrary.Migrations
                     b.ToTable("TbCategories");
                 });
 
-            modelBuilder.Entity("DomainLibrary.Entities.TbCustomer", b =>
-                {
-                    b.Property<int>("CustomerId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerId"));
-
-                    b.Property<string>("CustomerName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("CustomerId");
-
-                    b.ToTable("TbCustomers");
-                });
-
             modelBuilder.Entity("DomainLibrary.Entities.TbGpu", b =>
                 {
                     b.Property<int>("GpuId")
@@ -349,7 +145,7 @@ namespace BuisnessLibrary.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GpuId"));
 
-                    b.Property<string>("Gpuname")
+                    b.Property<string>("GpuName")
                         .IsRequired()
                         .HasMaxLength(250)
                         .IsUnicode(false)
@@ -380,50 +176,6 @@ namespace BuisnessLibrary.Migrations
                     b.ToTable("TbHardDisks");
                 });
 
-            modelBuilder.Entity("DomainLibrary.Entities.TbIndexViewSetting", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("CurrentState")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Productpara")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("Title1SectionTspace")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)")
-                        .HasColumnName("Title1SectionTSpace");
-
-                    b.Property<string>("TitleInner1")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TbIndexViewSettings");
-                });
-
             modelBuilder.Entity("DomainLibrary.Entities.TbItem", b =>
                 {
                     b.Property<int>("ItemId")
@@ -443,9 +195,7 @@ namespace BuisnessLibrary.Migrations
                         .HasDefaultValue("");
 
                     b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2020, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified));
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("CurrentState")
                         .HasColumnType("int");
@@ -488,7 +238,7 @@ namespace BuisnessLibrary.Migrations
                     b.Property<decimal>("PurchasePrice")
                         .HasColumnType("decimal(8, 2)");
 
-                    b.Property<int?>("Ramid")
+                    b.Property<int?>("RamId")
                         .HasColumnType("int")
                         .HasColumnName("RAMId");
 
@@ -528,35 +278,11 @@ namespace BuisnessLibrary.Migrations
 
                     b.HasIndex(new[] { "ProcessorId" }, "IX_TbItems_ProcessorId");
 
-                    b.HasIndex(new[] { "Ramid" }, "IX_TbItems_RAMId");
+                    b.HasIndex(new[] { "RamId" }, "IX_TbItems_RAMId");
 
                     b.HasIndex(new[] { "ScreenResolutionId" }, "IX_TbItems_ScreenResolutionId");
 
                     b.ToTable("TbItems");
-                });
-
-            modelBuilder.Entity("DomainLibrary.Entities.TbItemDiscount", b =>
-                {
-                    b.Property<int>("ItemDiscountId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ItemDiscountId"));
-
-                    b.Property<decimal>("DiscountPercent")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ItemId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ItemDiscountId");
-
-                    b.HasIndex(new[] { "ItemId" }, "IX_TbItemDiscount_ItemId");
-
-                    b.ToTable("TbItemDiscount", (string)null);
                 });
 
             modelBuilder.Entity("DomainLibrary.Entities.TbItemImage", b =>
@@ -685,79 +411,20 @@ namespace BuisnessLibrary.Migrations
                     b.ToTable("TbProcessors");
                 });
 
-            modelBuilder.Entity("DomainLibrary.Entities.TbPurchaseInvoice", b =>
-                {
-                    b.Property<int>("InvoiceId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InvoiceId"));
-
-                    b.Property<DateTime>("InvoiceDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("(getdate())");
-
-                    b.Property<string>("Notes")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<int>("SupplierId")
-                        .HasColumnType("int");
-
-                    b.HasKey("InvoiceId");
-
-                    b.HasIndex("SupplierId");
-
-                    b.ToTable("TbPurchaseInvoices");
-                });
-
-            modelBuilder.Entity("DomainLibrary.Entities.TbPurchaseInvoiceItem", b =>
-                {
-                    b.Property<int>("InvoiceItemId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("InvoiceId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("InvoicePrice")
-                        .HasColumnType("decimal(8, 4)");
-
-                    b.Property<int>("ItemId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Notes")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<double>("Qty")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("float")
-                        .HasDefaultValue(1.0);
-
-                    b.HasKey("InvoiceItemId");
-
-                    b.HasIndex("InvoiceId");
-
-                    b.HasIndex("ItemId");
-
-                    b.ToTable("TbPurchaseInvoiceItems");
-                });
-
             modelBuilder.Entity("DomainLibrary.Entities.TbRam", b =>
                 {
-                    b.Property<int>("Ramid")
+                    b.Property<int>("RamId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("RAMId");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ramid"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RamId"));
 
-                    b.Property<int?>("Ramsize")
+                    b.Property<int?>("RamSize")
                         .HasColumnType("int")
                         .HasColumnName("RAMSize");
 
-                    b.HasKey("Ramid");
+                    b.HasKey("RamId");
 
                     b.ToTable("TbRAMs", (string)null);
                 });
@@ -783,14 +450,8 @@ namespace BuisnessLibrary.Migrations
                     b.Property<int>("CurrentState")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("DelivryDate")
                         .HasColumnType("datetime");
-
-                    b.Property<int?>("DelivryManId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("InvoiceDate")
                         .ValueGeneratedOnAdd()
@@ -834,10 +495,10 @@ namespace BuisnessLibrary.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<double>("Qty")
+                    b.Property<int>("Qty")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("float")
-                        .HasDefaultValue(1.0);
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.HasKey("InvoiceItemId");
 
@@ -867,150 +528,34 @@ namespace BuisnessLibrary.Migrations
                     b.ToTable("TbScreenResolutions");
                 });
 
-            modelBuilder.Entity("DomainLibrary.Entities.TbSetting", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)")
-                        .HasDefaultValue("");
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("ContactNumber")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)")
-                        .HasDefaultValue("");
-
-                    b.Property<string>("ContantEmail")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)")
-                        .HasDefaultValue("");
-
-                    b.Property<string>("FacebookLink")
-                        .IsRequired()
-                        .HasMaxLength(400)
-                        .HasColumnType("nvarchar(400)");
-
-                    b.Property<string>("InstgramLink")
-                        .IsRequired()
-                        .HasMaxLength(400)
-                        .HasColumnType("nvarchar(400)");
-
-                    b.Property<string>("LastPanner")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)")
-                        .HasDefaultValue("");
-
-                    b.Property<string>("Logo")
-                        .IsRequired()
-                        .HasMaxLength(400)
-                        .HasColumnType("nvarchar(400)");
-
-                    b.Property<string>("MiddlePanner")
-                        .IsRequired()
-                        .HasMaxLength(400)
-                        .HasColumnType("nvarchar(400)");
-
-                    b.Property<string>("TwitterLink")
-                        .IsRequired()
-                        .HasMaxLength(400)
-                        .HasColumnType("nvarchar(400)");
-
-                    b.Property<string>("WebsiteDescription")
-                        .IsRequired()
-                        .HasMaxLength(400)
-                        .HasColumnType("nvarchar(400)");
-
-                    b.Property<string>("WebsiteName")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("YoutubeLink")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("TbSettings");
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles", (string)null);
                 });
 
-            modelBuilder.Entity("DomainLibrary.Entities.TbSlider", b =>
-                {
-                    b.Property<int>("SliderId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SliderId"));
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)")
-                        .HasDefaultValue("");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("CurrentState")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("ImageName")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("Title")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.HasKey("SliderId");
-
-                    b.ToTable("TbSlider", (string)null);
-                });
-
-            modelBuilder.Entity("DomainLibrary.Entities.TbSupplier", b =>
-                {
-                    b.Property<int>("SupplierId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SupplierId"));
-
-                    b.Property<string>("SupplierName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("SupplierId")
-                        .HasName("PK_TbSupplier");
-
-                    b.ToTable("TbSuppliers");
-                });
-
-            modelBuilder.Entity("DomainLibrary.Entities.TbViewName", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1018,22 +563,24 @@ namespace BuisnessLibrary.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ControllerName")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FormName")
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("TbViewNames");
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
-            modelBuilder.Entity("DomainLibrary.Entities.TempImageUrl", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1041,309 +588,77 @@ namespace BuisnessLibrary.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ImageUrl")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.HasKey("Id")
-                        .HasName("PK__TempImag__3214EC07384E5E54");
-
-                    b.ToTable("TempImageUrls");
-                });
-
-            modelBuilder.Entity("DomainLibrary.Entities.VwItem", b =>
-                {
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CategoryName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
+                    b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("CurrentState")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
+                    b.Property<string>("ClaimValue")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("GpuId")
-                        .HasColumnType("int")
-                        .HasColumnName("GPUId");
-
-                    b.Property<string>("Gpuname")
+                    b.Property<string>("UserId")
                         .IsRequired()
-                        .HasMaxLength(250)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(250)")
-                        .HasColumnName("GPUName");
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("HardDisk")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(250)");
+                    b.HasKey("Id");
 
-                    b.Property<int>("HardDiskId")
-                        .HasColumnType("int");
+                    b.HasIndex("UserId");
 
-                    b.Property<string>("ImageName")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                    b.ToTable("AspNetUserClaims", (string)null);
+                });
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("ItemId")
-                        .HasColumnType("int");
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ItemName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("ItemTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ItemTypeName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("OsId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("OsName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Processor")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(250)");
-
-                    b.Property<int>("ProcessorId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("PurchasePrice")
-                        .HasColumnType("decimal(8, 2)");
-
-                    b.Property<int?>("Ramid")
-                        .HasColumnType("int")
-                        .HasColumnName("RAMId");
-
-                    b.Property<int?>("Ramsize")
-                        .HasColumnType("int")
-                        .HasColumnName("RAMSize");
-
-                    b.Property<decimal>("SalesPrice")
-                        .HasColumnType("decimal(8, 2)");
-
-                    b.Property<string>("ScreenResolution")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(250)");
-
-                    b.Property<int>("ScreenResolutionId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ScreenSize")
-                        .IsRequired()
+                    b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Weight")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.ToTable((string)null);
-
-                    b.ToView("VwItems", (string)null);
-                });
-
-            modelBuilder.Entity("DomainLibrary.Entities.VwItemCategory", b =>
-                {
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CategoryName")
+                    b.Property<string>("UserId")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ImageName")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                    b.HasKey("LoginProvider", "ProviderKey");
 
-                    b.Property<int>("ItemId")
-                        .HasColumnType("int");
+                    b.HasIndex("UserId");
 
-                    b.Property<string>("ItemName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<decimal>("PurchasePrice")
-                        .HasColumnType("decimal(8, 2)");
-
-                    b.Property<decimal>("SalesPrice")
-                        .HasColumnType("decimal(8, 2)");
-
-                    b.ToTable((string)null);
-
-                    b.ToView("VwItemCategories", (string)null);
+                    b.ToTable("AspNetUserLogins", (string)null);
                 });
 
-            modelBuilder.Entity("DomainLibrary.Entities.VwItemsOutOfInvoice", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.Property<string>("CategoryName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<decimal?>("InvoicePrice")
-                        .HasColumnType("decimal(8, 2)");
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ItemName")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.HasKey("UserId", "RoleId");
 
-                    b.Property<decimal?>("PurchasePrice")
-                        .HasColumnType("decimal(8, 2)");
+                    b.HasIndex("RoleId");
 
-                    b.ToTable((string)null);
-
-                    b.ToView("VwItemsOutOfInvoices", (string)null);
+                    b.ToTable("AspNetUserRoles", (string)null);
                 });
 
-            modelBuilder.Entity("DomainLibrary.Entities.VwSalesInvoice", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("DelivryDate")
-                        .HasColumnType("datetime");
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("DelivryManId")
-                        .HasColumnType("int");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("FirstName")
+                    b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("InvoiceDate")
-                        .HasColumnType("datetime");
+                    b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.Property<int>("InvoiceId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Notes")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.ToTable((string)null);
-
-                    b.ToView("VwSalesInvoices", (string)null);
-                });
-
-            modelBuilder.Entity("TbCustomerItem", b =>
-                {
-                    b.Property<int>("ItemId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ItemId", "CustomerId");
-
-                    b.HasIndex(new[] { "CustomerId" }, "IX_TbCustomerItems_CustomerId");
-
-                    b.ToTable("TbCustomerItems", (string)null);
-                });
-
-            modelBuilder.Entity("AspNetUserRole", b =>
-                {
-                    b.HasOne("DomainLibrary.Entities.AspNetRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DomainLibrary.Entities.AspNetUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("DomainLibrary.Entities.AspNetRoleClaim", b =>
-                {
-                    b.HasOne("DomainLibrary.Entities.AspNetRole", "Role")
-                        .WithMany("AspNetRoleClaims")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
-                });
-
-            modelBuilder.Entity("DomainLibrary.Entities.AspNetUserClaim", b =>
-                {
-                    b.HasOne("DomainLibrary.Entities.AspNetUser", "User")
-                        .WithMany("AspNetUserClaims")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("DomainLibrary.Entities.AspNetUserLogin", b =>
-                {
-                    b.HasOne("DomainLibrary.Entities.AspNetUser", "User")
-                        .WithMany("AspNetUserLogins")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("DomainLibrary.Entities.AspNetUserToken", b =>
-                {
-                    b.HasOne("DomainLibrary.Entities.AspNetUser", "User")
-                        .WithMany("AspNetUserTokens")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("DomainLibrary.Entities.TbBusinessInfo", b =>
-                {
-                    b.HasOne("DomainLibrary.Entities.TbCustomer", "Cutomer")
-                        .WithOne("TbBusinessInfo")
-                        .HasForeignKey("DomainLibrary.Entities.TbBusinessInfo", "CutomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Cutomer");
+                    b.ToTable("AspNetUserTokens", (string)null);
                 });
 
             modelBuilder.Entity("DomainLibrary.Entities.TbItem", b =>
@@ -1391,7 +706,7 @@ namespace BuisnessLibrary.Migrations
 
                     b.HasOne("DomainLibrary.Entities.TbRam", "Ram")
                         .WithMany("TbItems")
-                        .HasForeignKey("Ramid")
+                        .HasForeignKey("RamId")
                         .HasConstraintName("FK_TbItems_TbRAMs");
 
                     b.HasOne("DomainLibrary.Entities.TbScreenResolution", "ScreenResolution")
@@ -1418,17 +733,6 @@ namespace BuisnessLibrary.Migrations
                     b.Navigation("ScreenResolution");
                 });
 
-            modelBuilder.Entity("DomainLibrary.Entities.TbItemDiscount", b =>
-                {
-                    b.HasOne("DomainLibrary.Entities.TbItem", "Item")
-                        .WithMany("TbItemDiscounts")
-                        .HasForeignKey("ItemId")
-                        .IsRequired()
-                        .HasConstraintName("FK_TbItemDiscounts_TbItems");
-
-                    b.Navigation("Item");
-                });
-
             modelBuilder.Entity("DomainLibrary.Entities.TbItemImage", b =>
                 {
                     b.HasOne("DomainLibrary.Entities.TbItem", "Item")
@@ -1436,36 +740,6 @@ namespace BuisnessLibrary.Migrations
                         .HasForeignKey("ItemId")
                         .IsRequired()
                         .HasConstraintName("FK_TbItemImages_TbItems");
-
-                    b.Navigation("Item");
-                });
-
-            modelBuilder.Entity("DomainLibrary.Entities.TbPurchaseInvoice", b =>
-                {
-                    b.HasOne("DomainLibrary.Entities.TbSupplier", "Supplier")
-                        .WithMany("TbPurchaseInvoices")
-                        .HasForeignKey("SupplierId")
-                        .IsRequired()
-                        .HasConstraintName("FK_TbPurchaseInvoices_TbSuppliers");
-
-                    b.Navigation("Supplier");
-                });
-
-            modelBuilder.Entity("DomainLibrary.Entities.TbPurchaseInvoiceItem", b =>
-                {
-                    b.HasOne("DomainLibrary.Entities.TbPurchaseInvoice", "Invoice")
-                        .WithMany("TbPurchaseInvoiceItems")
-                        .HasForeignKey("InvoiceId")
-                        .IsRequired()
-                        .HasConstraintName("FK_TbPurchaseInvoiceItems_TbPurchaseInvoices");
-
-                    b.HasOne("DomainLibrary.Entities.TbItem", "Item")
-                        .WithMany("TbPurchaseInvoiceItems")
-                        .HasForeignKey("ItemId")
-                        .IsRequired()
-                        .HasConstraintName("FK_TbPurchaseInvoiceItems_TbItems");
-
-                    b.Navigation("Invoice");
 
                     b.Navigation("Item");
                 });
@@ -1489,43 +763,60 @@ namespace BuisnessLibrary.Migrations
                     b.Navigation("Item");
                 });
 
-            modelBuilder.Entity("TbCustomerItem", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("DomainLibrary.Entities.TbCustomer", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DomainLibrary.Entities.TbItem", null)
-                        .WithMany()
-                        .HasForeignKey("ItemId")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DomainLibrary.Entities.AspNetRole", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.Navigation("AspNetRoleClaims");
+                    b.HasOne("BuisnessLibrary.Bl.Account.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("DomainLibrary.Entities.AspNetUser", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.Navigation("AspNetUserClaims");
+                    b.HasOne("BuisnessLibrary.Bl.Account.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    b.Navigation("AspNetUserLogins");
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("AspNetUserTokens");
+                    b.HasOne("BuisnessLibrary.Bl.Account.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.HasOne("BuisnessLibrary.Bl.Account.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DomainLibrary.Entities.TbCategory", b =>
                 {
                     b.Navigation("TbItems");
-                });
-
-            modelBuilder.Entity("DomainLibrary.Entities.TbCustomer", b =>
-                {
-                    b.Navigation("TbBusinessInfo");
                 });
 
             modelBuilder.Entity("DomainLibrary.Entities.TbGpu", b =>
@@ -1540,11 +831,7 @@ namespace BuisnessLibrary.Migrations
 
             modelBuilder.Entity("DomainLibrary.Entities.TbItem", b =>
                 {
-                    b.Navigation("TbItemDiscounts");
-
                     b.Navigation("TbItemImages");
-
-                    b.Navigation("TbPurchaseInvoiceItems");
 
                     b.Navigation("TbSalesInvoiceItems");
                 });
@@ -1564,11 +851,6 @@ namespace BuisnessLibrary.Migrations
                     b.Navigation("TbItems");
                 });
 
-            modelBuilder.Entity("DomainLibrary.Entities.TbPurchaseInvoice", b =>
-                {
-                    b.Navigation("TbPurchaseInvoiceItems");
-                });
-
             modelBuilder.Entity("DomainLibrary.Entities.TbRam", b =>
                 {
                     b.Navigation("TbItems");
@@ -1582,11 +864,6 @@ namespace BuisnessLibrary.Migrations
             modelBuilder.Entity("DomainLibrary.Entities.TbScreenResolution", b =>
                 {
                     b.Navigation("TbItems");
-                });
-
-            modelBuilder.Entity("DomainLibrary.Entities.TbSupplier", b =>
-                {
-                    b.Navigation("TbPurchaseInvoices");
                 });
 #pragma warning restore 612, 618
         }

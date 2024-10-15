@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace DomainLibrary.Entities;
 
 public partial class TbItemType
 {
+    [Key]
+
     public int ItemTypeId { get; set; }
 
     public string ItemTypeName { get; set; } = null!;

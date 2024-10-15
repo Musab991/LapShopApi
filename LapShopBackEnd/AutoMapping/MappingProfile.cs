@@ -1,8 +1,6 @@
-﻿using AutoMapper;
-using BuisnessLibrary.Dto.Item;
-using BuisnessLibrary.Dto.Category; // Import DTOs for Category
-using DomainLibrary.Entities;
-using BuisnessLibrary.Dto.ItempType;
+﻿using BuisnessLibrary.Dto.Item;
+using BuisnessLibrary.Dto.Category; 
+using BuisnessLibrary.Dto.ItemType;
 using BuisnessLibrary.Dto.Os;
 
 namespace LapShop.Api.AutoMapping
@@ -16,6 +14,7 @@ namespace LapShop.Api.AutoMapping
                 .ForMember(dest => dest.ItemId, opt => opt.Ignore())
                 .ForMember(dest => dest.TbItemImages, opt => opt.Ignore())
                 .ForMember(dest => dest.UpdatedDate, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src => DateTime.Now)) // Set CreatedDate to now
                 .ForMember(dest => dest.UpdatedBy, opt => opt.Ignore())
                 .ForMember(dest => dest.DateDeleted, opt => opt.Ignore())
                 .ForMember(dest => dest.IsDeleted, opt => opt.MapFrom(src => false));

@@ -31,6 +31,7 @@ namespace BuisnessLibrary.Dto.Item
 
         public string ProcessorName { get; set; } = null!;
 
+        public string ?Description { get; set; }
         public string HardDiskName { get; set; } = null!;
         public string ScreenResolution { get; set; } = null!;
         public int Ram { get; set; }
@@ -39,6 +40,4 @@ namespace BuisnessLibrary.Dto.Item
 
 
     }
-
-
 }

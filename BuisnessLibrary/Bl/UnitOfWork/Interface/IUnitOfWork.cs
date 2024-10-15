@@ -2,6 +2,7 @@
 using DomainLibrary.Entities;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,13 @@ namespace BuisnessLibrary.Bl.UnitOfWork.Interface
         IItemImageRepository ItemImages { get; }
         IGenericRepository<TbCategory>Categories{get;}
         IGenericRepository<TbItemType> ItemTypes { get;}
+        IGenericRepository<TbGpu> Gpus{ get;}
         IGenericRepository<TbO> Os{ get;}
+        IGenericRepository<TbProcessor> Processors { get;}
+        IGenericRepository<TbHardDisk> HardDisks { get;}
+        IGenericRepository<TbScreenResolution> ScreenResolutions { get;}
+        IGenericRepository<TbRam> Rams { get;}
+        IGenericRepository<TbSalesInvoice> SalesInvoices { get;}
         //Start the database Transaction
         void CreateTransaction();
         //Commit the database Transaction

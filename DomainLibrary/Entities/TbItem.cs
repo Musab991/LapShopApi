@@ -1,11 +1,14 @@
 ﻿using DomainLibrary.Entities.Contract;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace DomainLibrary.Entities;
 
 public partial class TbItem: ISoftDeletable
 {
+    [Key]
+
     public int ItemId { get; set; }
 
     public string ItemName { get; set; } = null!;
@@ -50,7 +53,7 @@ public partial class TbItem: ISoftDeletable
 
     public int ScreenResolutionId { get; set; }
 
-    public int? Ramid { get; set; }
+    public int? RamId { get; set; }
 
     public virtual TbCategory Category { get; set; } = null!;
 
@@ -68,14 +71,11 @@ public partial class TbItem: ISoftDeletable
 
     public virtual TbScreenResolution ScreenResolution { get; set; } = null!;
 
-    public virtual ICollection<TbItemDiscount> TbItemDiscounts { get; set; } = new List<TbItemDiscount>();
 
     public virtual ICollection<TbItemImage> TbItemImages { get; set; } = new List<TbItemImage>();
 
-    public virtual ICollection<TbPurchaseInvoiceItem> TbPurchaseInvoiceItems { get; set; } = new List<TbPurchaseInvoiceItem>();
 
     public virtual ICollection<TbSalesInvoiceItem> TbSalesInvoiceItems { get; set; } = new List<TbSalesInvoiceItem>();
 
-    public virtual ICollection<TbCustomer> Customers { get; set; } = new List<TbCustomer>();
 
 }

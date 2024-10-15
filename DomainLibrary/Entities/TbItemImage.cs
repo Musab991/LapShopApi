@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace DomainLibrary.Entities;
 
 public partial class TbItemImage
 {
+    [Key]
+
     public int ImageId { get; set; }
 
     public string ImageName { get; set; } = null!;

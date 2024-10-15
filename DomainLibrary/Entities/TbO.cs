@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace DomainLibrary.Entities;
 
 public partial class TbO
 {
+    [Key]
+
     public int OsId { get; set; }
 
     public string OsName { get; set; } = null!;

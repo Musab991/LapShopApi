@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace DomainLibrary.Entities;
 
 public partial class TbCategory
 {
+    [Key]
     public int CategoryId { get; set; }
 
     public string CategoryName { get; set; } = null!;

@@ -3,14 +3,8 @@ using BuisnessLibrary.Bl.Repository.Interface;
 using BuisnessLibrary.Bl.UnitOfWork.Interface;
 using DomainLibrary.Entities;
 using Microsoft.EntityFrameworkCore.Storage;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
 using System.Data.Entity.Validation;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using static System.Reflection.Metadata.BlobBuilder;
 
 namespace BuisnessLibrary.Bl.UnitOfWork
 {
@@ -22,7 +16,13 @@ namespace BuisnessLibrary.Bl.UnitOfWork
         public IGenericRepository<TbCategory> Categories{ get; private set; }
         public IGenericRepository<TbItemType> ItemTypes{ get; private set; }
         public IGenericRepository<TbO> Os{ get; private set; }
+        public IGenericRepository<TbGpu> Gpus{ get; private set; }
         public IItemImageRepository ItemImages { get; private set; }
+        public IGenericRepository<TbProcessor> Processors { get; }
+        public IGenericRepository<TbHardDisk> HardDisks{ get; }
+        public IGenericRepository<TbScreenResolution> ScreenResolutions{ get; }
+        public IGenericRepository<TbRam> Rams{ get; }
+        public IGenericRepository<TbSalesInvoice> SalesInvoices { get; }
 
         private string _errorMessage = string.Empty;
         // Use the correct type for EF Core transactions
@@ -35,6 +35,12 @@ namespace BuisnessLibrary.Bl.UnitOfWork
             Categories = new GenericRepository<TbCategory>(_context);
             ItemTypes = new GenericRepository<TbItemType>(_context);
             Os = new GenericRepository<TbO>(_context);
+            Gpus = new GenericRepository<TbGpu>(_context);
+            Processors = new GenericRepository<TbProcessor>(_context);
+            HardDisks = new GenericRepository<TbHardDisk>(_context);
+            ScreenResolutions = new GenericRepository<TbScreenResolution>(_context);
+            Rams = new GenericRepository<TbRam>(_context);
+            SalesInvoices = new GenericRepository<TbSalesInvoice>(_context);
             ItemImages = new ItemImageRepository(_context);
 
         }

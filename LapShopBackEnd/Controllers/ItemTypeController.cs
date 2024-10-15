@@ -1,5 +1,5 @@
 ﻿
-using BuisnessLibrary.Dto.ItempType;
+using BuisnessLibrary.Dto.ItemType;
 
 namespace LapShop.Api.Controllers
 {
@@ -86,7 +86,7 @@ namespace LapShop.Api.Controllers
 
 
                 IEnumerable<ItemTypeDto> listPaginatedItemTypesDto =
-                    ItemTypeDtoMethods.convertItemTypesToListOfItemTypesDto(paginatedItemTypes);
+                    ItemTypeMapper.convertItemTypesToListOfItemTypesDto(paginatedItemTypes);
 
                 if (listPaginatedItemTypesDto == null || listPaginatedItemTypesDto.Count() == 0)
                 {

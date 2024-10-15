@@ -74,7 +74,7 @@ namespace BuisnessLibrary.Bl.Repository
                                  int? take = null,
                                  string[]? includes = null)
               => BuildQuery(filter, orderBy, orderByDirection, skip, take, includes).ToList();
-
+     
         public async Task<TEntity> FindOneAsync(Expression<Func<TEntity, bool>> filter, string[]? includes = null)
              => await BuildQuery(filter, null, null, null, null, includes).SingleOrDefaultAsync();
 
@@ -161,6 +161,7 @@ namespace BuisnessLibrary.Bl.Repository
             return query;
 
         }
+     
 
         public void Dispose()
         {

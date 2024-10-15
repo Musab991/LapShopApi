@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace DomainLibrary.Entities;
 
 public partial class TbSalesInvoiceItem
 {
+    [Key]
+
     public int InvoiceItemId { get; set; }
 
     public int ItemId { get; set; }
 
     public int InvoiceId { get; set; }
 
-    public double Qty { get; set; }
+    public int Qty { get; set; }
 
     public decimal InvoicePrice { get; set; }
 
